@@ -482,20 +482,43 @@ async function loadAppointments() {
   }
 
   list.innerHTML = data.map(a => `
-    <div class="admin-item">
-      <strong>${escapeHTML(a.customer_name)}</strong>
-      <div class="muted">${escapeHTML(a.contact_info)}</div>
-      <div class="muted">${escapeHTML(a.service)} · ${formatDate(a.start_at)}</div>
-      <div class="muted">${formatTime(a.start_at)} – ${formatTime(a.end_at)}</div>
-      <div style="margin-top:7px">Status: <strong>${escapeHTML(a.status)}</strong></div>
-      <div class="admin-actions">
-        ${a.status !== "confirmed" && a.status !== "cancelled" ?
-          `<button class="secondary" data-action="confirmed" data-id="${escapeHTML(a.id)}">CONFIRM</button>` : ""}
-        ${a.status !== "cancelled" ?
-          `<button class="secondary" data-action="cancelled" data-id="${escapeHTML(a.id)}">CANCEL</button>` : ""}
+  <div class="admin-item">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+      <div>
+        <strong style="font-size:16px">${escapeHTML(a.customer_name)}</strong>
+        <div class="muted">${escapeHTML(a.contact_info)}</div>
       </div>
+      <span style="
+        padding:5px 9px;
+        border-radius:20px;
+        font-size:10px;
+        font-weight:800;
+        text-transform:uppercase;
+        background:${a.status === "confirmed" ? "#173d27" : a.status === "cancelled" ? "#401c1c" : "#493817"};
+        color:${a.status === "confirmed" ? "#80e6a1" : a.status === "cancelled" ? "#ff9999" : "#ffd580"};
+      ">${escapeHTML(a.status)}</span>
     </div>
-  `).join("");
+
+    <div style="margin-top:14px;font-weight:700">
+      ${escapeHTML(a.service)}
+    </div>
+
+    <div class="muted" style="margin-top:5px">
+      ${formatDate(a.start_at)}
+    </div>
+
+    <div class="muted">
+      ${formatTime(a.start_at)} – ${formatTime(a.end_at)}
+    </div>
+
+    <div class="admin-actions">
+      ${a.status !== "confirmed" && a.status !== "cancelled" ?
+        `<button class="secondary" data-action="confirmed" data-id="${escapeHTML(a.id)}">CONFIRM</button>` : ""}
+      ${a.status !== "cancelled" ?
+        `<button class="secondary" data-action="cancelled" data-id="${escapeHTML(a.id)}">CANCEL</button>` : ""}
+    </div>
+  </div>
+`).join("");
 }
 
 $("appointmentsList").addEventListener("click", async event => {
