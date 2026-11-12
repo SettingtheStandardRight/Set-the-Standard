@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Set the Standard. | Book an Appointment</title>
+<style>
+:root{--bg:#0c0c0c;--panel:#151515;--panel2:#202020;--line:#303030;--muted:#a2a2a2;--white:#f5f5f5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font:15px/1.5 Arial,Helvetica,sans-serif}
+.wrap{max-width:900px;margin:auto;padding:28px 18px 60px}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:10px 0 22px}
+.brand{font-size:19px;font-weight:800;letter-spacing:.12em}.tag{color:var(--muted);font-size:11px;letter-spacing:.18em}
+h1{font-size:clamp(30px,6vw,48px);line-height:1.05;letter-spacing:-.04em;margin:34px 0 8px} .sub{color:var(--muted);margin:0 0 28px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}
+h2{font-size:14px;letter-spacing:.12em;margin:0 0 16px}.services{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.service{background:#111;border:1px solid var(--line);border-radius:10px;padding:15px;text-align:left;color:var(--white);cursor:pointer}
+.service.selected{border-color:#eee;background:#242424}.service b{display:block;font-size:15px}.price{font-size:23px;font-weight:700;margin-top:7px}.hint{font-size:12px;color:var(--muted);margin-top:5px}
+.calendar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.month{font-weight:700}.nav{background:#222;border:1px solid var(--line);color:white;border-radius:8px;padding:8px 12px;cursor:pointer}
+.week,.days{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.week div{text-align:center;color:var(--muted);font-size:11px;padding:7px 0}
+.day{min-height:44px;border:1px solid var(--line);background:#111;color:white;border-radius:8px;cursor:pointer}.day:disabled{background:#080808;color:#555;text-decoration:line-through;cursor:not-allowed;border-color:#191919}.day.chosen{background:#f5f5f5;color:#111;border-color:#fff;font-weight:bold}.day.empty{visibility:hidden}
+.legend{display:flex;gap:16px;color:var(--muted);font-size:11px;margin-top:13px}.dot{display:inline-block;width:9px;height:9px;border-radius:2px;background:#eee;margin-right:5px}.dot.off{background:#333}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.slot{background:#111;border:1px solid var(--line);color:white;padding:12px;border-radius:8px;cursor:pointer}.slot.selected{background:#eee;color:#111}.slot:disabled{background:#080808;color:#555;text-decoration:line-through;cursor:not-allowed}
+label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}input{width:100%;background:#0e0e0e;border:1px solid var(--line);border-radius:8px;padding:13px;color:white;font-size:15px}
+.primary{width:100%;border:0;border-radius:9px;padding:15px;background:#f4f4f4;color:#111;font-weight:800;letter-spacing:.04em;cursor:pointer;margin-top:18px}.primary:disabled{opacity:.35;cursor:not-allowed}
+.note{color:var(--muted);font-size:12px}.footer{text-align:center;color:#777;font-size:11px;letter-spacing:.14em;margin-top:35px}
+.adminlink{background:none;border:0;color:#777;text-decoration:underline;cursor:pointer;font-size:12px;margin-top:18px}
+.hidden{display:none!important}.admin-row{display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding:12px 0}.admin-row button{background:#222;color:white;border:1px solid var(--line);padding:7px 10px;border-radius:6px}
+@media(max-width:600px){.services{grid-template-columns:1fr}.slots{grid-template-columns:repeat(2,1fr)}.card{padding:16px}.day{min-height:39px}}
+</style></head>
+<body><main class="wrap">
+<header class="top"><div class="brand">SET THE STANDARD.</div><div class="tag">BARBER BOOKING</div></header>
+<section id="booking">
+<h1>BOOK AN APPOINTMENT.</h1><p class="sub">Choose your cut, pick an available date and time, and send your request.</p>
+<div class="card"><h2>01 / SELECT SERVICE</h2><div class="services" id="services">
+<button class="service selected" data-service="Booked Haircut" data-price="200"><b>Booked Haircut</b><div class="price">₱200</div><div class="hint">Reserved appointment</div></button>
+<button class="service" data-service="The Feature Cut" data-price="250"><b>The Feature Cut</b><div class="price">₱250</div><div class="hint">60–80 min session · photos and a page feature</div></button>
+<button class="service" data-service="Walk-in Haircut" data-price="150"><b>Walk-in Haircut</b><div class="price">₱150</div><div class="hint">Walk-ins only · subject to availability</div></button>
+</div><p class="note">Online appointments are ₱200. Walk-in pricing is shown for reference; booking ahead is recommended.</p></div>
+<div class="card"><h2>02 / SELECT DATE</h2><div class="calendar-head"><button class="nav" id="prev">←</button><div class="month" id="monthLabel"></div><button class="nav" id="next">→</button></div><div class="week"><div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div></div><div class="days" id="days"></div><div class="legend"><span><i class="dot"></i>Selected</span><span><i class="dot off"></i>Unavailable / booked</span></div></div>
+<div class="card"><h2>03 / SELECT TIME</h2><div class="slots" id="slots"></div><p class="note">Hours: Monday–Saturday, 12:00 PM–7:00 PM. Sunday is closed.</p></div>
+<div class="card"><h2>04 / YOUR DETAILS</h2><label for="name">FULL NAME</label><input id="name" placeholder="Your name"><label for="phone">MOBILE NUMBER</label><input id="phone" placeholder="09XX XXX XXXX" inputmode="tel"><button class="primary" id="book" disabled>CONTINUE TO MESSENGER</button><p class="note">Your booking request will open in Facebook Messenger. Please press Send to submit it. Your appointment is not confirmed until the barber replies.</p></div>
+</section>
+<section id="admin" class="hidden"><h1>ADMIN DASHBOARD.</h1><p class="sub">Manage blocked dates and appointment times on this device.</p><div class="card"><h2>ADMIN ACCESS</h2><label>Password</label><input id="adminPass" type="password" placeholder="Enter admin password"><button class="primary" id="login">UNLOCK ADMIN</button><p class="note">Prototype only: this demo has no secure server-side login.</p></div><div id="adminPanel" class="card hidden"><h2>BLOCK A DATE OR TIME</h2><label>Date</label><input type="date" id="blockDate"><label>Time (leave blank to block the whole day)</label><select id="blockTime" style="width:100%;padding:12px;background:#0e0e0e;color:white;border:1px solid #303030;border-radius:8px"><option value="">Entire day</option><option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option><option>6:00 PM</option></select><button class="primary" id="addBlock">SAVE BLOCK</button><div id="blocks"></div></div></section>
+<div class="footer">SET THE STANDARD. · SIMPLE. CLEAN. PRECISE.<br><button class="adminlink" id="adminToggle">Admin</button></div>
+</main>
+<script>
+const messenger='https://m.me/1374436652426936';
+let selectedService='Booked Haircut',price=200,selectedDate=null,selectedTime=null;
+let view=new Date();view.setDate(1);
+const $=id=>document.getElementById(id);
+const key='sts_demo_blocks_v1';
+const getBlocks=()=>JSON.parse(localStorage.getItem(key)||'[]');
+const saveBlocks=x=>localStorage.setItem(key,JSON.stringify(x));
+const pad=n=>String(n).padStart(2,'0');
+const dateKey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const times=['12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM'];
+document.querySelectorAll('.service').forEach(b=>b.onclick=()=>{document.querySelectorAll('.service').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');selectedService=b.dataset.service;price=+b.dataset.price;validate()});
+function blockedDay(k){return getBlocks().some(x=>x.date===k&&!x.time)}
+function blockedTime(k,t){return getBlocks().some(x=>x.date===k&&(!x.time||x.time===t))}
+function renderCalendar(){
+ $('monthLabel').textContent=view.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+ const first=new Date(view.getFullYear(),view.getMonth(),1).getDay(),count=new Date(view.getFullYear(),view.getMonth()+1,0).getDate(),today=dateKey(new Date());
+ $('days').innerHTML='';
+ for(let i=0;i<first;i++){let e=document.createElement('div');e.className='day empty';$('days').append(e)}
+ for(let n=1;n<=count;n++){let d=new Date(view.getFullYear(),view.getMonth(),n),k=dateKey(d),b=document.createElement('button');b.className='day';b.textContent=n;
+ let closed=d.getDay()===0||k<today||blockedDay(k);b.disabled=closed;if(k===selectedDate)b.classList.add('chosen');b.onclick=()=>{selectedDate=k;selectedTime=null;renderCalendar();renderSlots();validate()};$('days').append(b)}
+}
+function renderSlots(){let wrap=$('slots');wrap.innerHTML='';if(!selectedDate){wrap.innerHTML='<p class="note">Choose a date first.</p>';return}
+ times.forEach(t=>{let b=document.createElement('button');b.className='slot';b.textContent=t;b.disabled=blockedTime(selectedDate,t);if(t===selectedTime)b.classList.add('selected');b.onclick=()=>{selectedTime=t;renderSlots();validate()};wrap.append(b)})}
+function validate(){$('book').disabled=!(selectedDate&&selectedTime&&$('name').value.trim()&&$('phone').value.trim())}
+$('name').oninput=$('phone').oninput=validate;
+$('prev').onclick=()=>{view.setMonth(view.getMonth()-1);renderCalendar()};
+$('next').onclick=()=>{view.setMonth(view.getMonth()+1);renderCalendar()};
+$('book').onclick=()=>{let msg=`Hello Set the Standard.! I'd like to request an appointment.%0AName: ${encodeURIComponent($('name').value)}%0AMobile: ${encodeURIComponent($('phone').value)}%0AService: ${encodeURIComponent(selectedService)} (₱${price})%0ADate: ${selectedDate}%0ATime: ${encodeURIComponent(selectedTime)}%0A%0APlease let me know if this slot is available.`;location.href=messenger+'?text='+msg};
+$('adminToggle').onclick=()=>{$('booking').classList.toggle('hidden');$('admin').classList.toggle('hidden')};
+$('login').onclick=()=>{if($('adminPass').value){$('adminPanel').classList.remove('hidden');renderBlocks()}};
+$('addBlock').onclick=()=>{let d=$('blockDate').value,t=$('blockTime').value;if(!d)return alert('Choose a date.');let a=getBlocks();if(!a.some(x=>x.date===d&&x.time===t)){a.push({date:d,time:t});saveBlocks(a)}renderBlocks();renderCalendar();renderSlots()};
+function renderBlocks(){$('blocks').innerHTML='<h2 style="margin-top:24px">CURRENT BLOCKS</h2>';getBlocks().forEach((x,i)=>{let r=document.createElement('div');r.className='admin-row';let s=document.createElement('span');s.textContent=x.date+' · '+(x.time||'Entire day');let b=document.createElement('button');b.textContent='Remove';b.onclick=()=>{let a=getBlocks();a.splice(i,1);saveBlocks(a);renderBlocks();renderCalendar();renderSlots()};r.append(s,b);$('blocks').append(r)})}
+renderCalendar();renderSlots();
+</script></body></html>
