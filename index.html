@@ -66,6 +66,16 @@ button {
 hr {border:0;border-top:1px solid var(--line);margin:25px 0}
 .status {font-size:12px;color:#bbb;margin-top:12px;white-space:pre-wrap}
 .admin-item {padding:15px 0;border-bottom:1px solid var(--line)}
+  .stats-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.stat-card {background:#101010;border:1px solid var(--line);border-radius:8px;padding:15px;min-width:0}
+.stat-label {font-size:10px;letter-spacing:1.5px;color:var(--gray)}
+.stat-number {font-size:28px;font-weight:900;margin-top:8px}
+.stat-note {font-size:11px;color:var(--gray);margin-top:5px}
+@media(max-width:520px) {
+  .stats-grid {grid-template-columns:1fr 1fr}
+  .stat-card:first-child {grid-column:1 / -1}
+  .stat-number {font-size:24px}
+}
 .admin-actions {display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .admin-actions button {padding:10px;font-size:12px}
 footer {text-align:center;color:#777;font-size:11px;padding:25px}
@@ -165,6 +175,28 @@ a {color:white}
     </div>
 
     <div class="hidden" id="dashboard">
+      <div class="card">
+  <strong>DASHBOARD OVERVIEW</strong>
+  <p class="muted">A quick look at your appointments.</p>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">TODAY'S BOOKINGS</div>
+      <div class="stat-number" id="todayBookingsCount">0</div>
+      <div class="stat-note">Appointments scheduled today</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">PENDING</div>
+      <div class="stat-number" id="pendingBookingsCount">0</div>
+      <div class="stat-note">Awaiting confirmation</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">CONFIRMED</div>
+      <div class="stat-number" id="confirmedBookingsCount">0</div>
+      <div class="stat-note">Accepted appointments</div>
+    </div>
+  </div>
+</div>
+      <div class="hidden" id="dashboard">
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <strong>APPOINTMENTS</strong>
@@ -421,7 +453,16 @@ async function refreshAdmin() {
   await loadAppointments();
   await loadBlocked();
 }
+function updateDashboardOverview(appointments) {
+  const today = manilaDate();
+  const todaysBookings = appointments.filter(a => manilaDate(new Date(a.start_at)) === today);
+  const pending = appointments.filter(a => a.status === "pending");
+  const confirmed = appointments.filter(a => a.status === "confirmed");
 
+  $("todayBookingsCount").textContent = todaysBookings.length;
+  $("pendingBookingsCount").textContent = pending.length;
+  $("confirmedBookingsCount").textContent = confirmed.length;
+}
 async function loadAppointments() {
   const list = $("appointmentsList");
   list.innerHTML = "Loading...";
@@ -433,6 +474,7 @@ async function loadAppointments() {
     list.textContent = "Unable to load appointments: " + error.message;
     return;
   }
+  updateDashboardOverview(data || []);
 
   if (!data.length) {
     list.textContent = "No appointments yet.";
