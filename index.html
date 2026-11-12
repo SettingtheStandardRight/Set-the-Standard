@@ -409,6 +409,9 @@ $("bookButton").addEventListener("click", async () => {
 });
 
 async function showDashboard() {
+  const {data: userData} = await db.auth.getUser();
+console.log("Logged-in user:", userData.user?.id);
+console.log("Admin check:", await db.rpc("is_admin"));
   $("loginPanel").classList.add("hidden");
   $("dashboard").classList.remove("hidden");
   await refreshAdmin();
